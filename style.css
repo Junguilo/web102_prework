@@ -72,6 +72,15 @@ body {
     text-align: center;
 }
 
+#unfunded-btn:hover, #funded-btn:hover, #all-btn:hover{
+    cursor: pointer;
+    box-shadow: 0 0 30px lightblue;
+}
+
+.emoji{
+    margin: 0 0 5px 90%;
+}
+
 button {
     font-family: 'Cabin';
     border: none;

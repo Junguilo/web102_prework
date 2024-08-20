@@ -42,6 +42,7 @@ function addGamesToPage(games) {
         // TIP: if your images are not displaying, make sure there is space
         // between the end of the src attribute and the end of the tag ("/>")
         const display=`
+        <p class="emoji"> ${emojiList(games[i].name)} </p>
         <img class="game-img" src=${games[i].img} />
         <h2>${games[i].name}</h2>
         <p>${games[i].description}</p>
@@ -109,6 +110,9 @@ function filterUnfundedOnly() {
         return games.pledged < games.goal;
     });
 
+    //optional function
+    highlighted("unfunded");
+
     // use the function we previously created to add the unfunded games to the DOM
     addGamesToPage(listOfCompletion);
 }
@@ -122,6 +126,9 @@ function filterFundedOnly() {
         return games.pledged > games.goal;
     });
 
+    //optional function
+    highlighted("funded");
+
     // use the function we previously created to add unfunded games to the DOM
     addGamesToPage(listOfCompletion);
 }
@@ -129,6 +136,9 @@ function filterFundedOnly() {
 // show all games
 function showAllGames() {
     deleteChildElements(gamesContainer);
+
+    //optional function
+    highlighted("all");
 
     // add all games from the JSON data to the DOM
     addGamesToPage(GAMES_JSON);
@@ -192,3 +202,84 @@ firstGameContainer.append(firstGame);
 const secondGame = document.createElement('p');
 secondGame.append(second.name);
 secondGameContainer.append(secondGame);
+
+//add all games to page on init
+showAllGames();
+
+/*******************************************************************************************
+ *  OPTIONAL IMPROVED FUCTIONALITY
+ */
+
+//Getting the buttons to stay highlighted when showing unfunded/funded/all games
+function highlighted(buttonName){
+    //optional. Highlight button when active
+    const allBtn = document.getElementById("all-btn");
+    const unfundedBtn = document.getElementById("unfunded-btn");
+    const fundedBtn = document.getElementById("funded-btn");
+
+    switch(buttonName){
+        case "all":
+            allBtn.style="background-color: #a8b0bc";
+            unfundedBtn.style="background-color: white";
+            fundedBtn.style="background-color: white";
+            break;
+        case "unfunded":
+            allBtn.style="background-color: white";
+            unfundedBtn.style="background-color: #a8b0bc";
+            fundedBtn.style="background-color: white";
+            break;
+        case "funded":
+            allBtn.style="background-color: white";
+            unfundedBtn.style="background-color: white";
+            fundedBtn.style="background-color: #a8b0bc";
+            break;
+        default:
+            allBtn.style="background-color: white";
+            unfundedBtn.style="background-color: white";
+            fundedBtn.style="background-color: white";
+            break;
+
+    }
+}
+
+// Adding functionality to the stats, the way the tutorial makes it seem clickable
+// Clicking the Individual Contributions will display all games, and clicking on Top Funded Game/Runner Up will only display those two. 
+const fundedRunnerGames = document.getElementById("top-games");
+function displayTop(){
+    let [first, second, ...others] = GAMES_JSON;
+    let top = [first, second];
+
+    deleteChildElements(gamesContainer);
+    highlighted("");
+    addGamesToPage(top);
+}
+fundedRunnerGames.addEventListener("click", displayTop);
+
+const stats = document.getElementById("stats-board");
+stats.addEventListener("click", showAllGames);
+
+// adding emojis to the top right of the games indicating if they're top/runner, funded, and unfunded
+function emojiList(gameName){
+    //take funded lists to compare with 
+    let listOfFunded = GAMES_JSON.filter( (games)=>{
+        return games.pledged > games.goal;
+    });
+
+
+    //takes top two funded, and the rest of them
+    let [first, second, ...others] = listOfFunded;
+
+    const otherFundedNames = others.reduce( (acc, games) => {
+        return acc + games.name;
+    }, 0);
+
+    if(first.name == gameName){
+        return '🥇';
+    } else if(second.name == gameName){
+        return '🥈';
+    } else if( otherFundedNames.includes(gameName, 0)){
+        return '💰';
+    } else {
+        return '😢';
+    }
+}
