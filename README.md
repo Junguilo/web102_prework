@@ -1,4 +1,4 @@
-# WEB102 Prework - *Name of App Here*
+# WEB102 Prework - *Sea Saves*
 
 Submitted by: **June Eguilos**
 
@@ -38,6 +38,7 @@ GIF created with ScreenToGif
 ## Notes
 
 Describe any challenges encountered while building the app.
+
 I am really rusty with JavaScript, I struggled a lot with understanding the syntax and began encountering a lot of errors. Throughout the app I started to feel more confident about adding more features to the app that I thought were needed. 
 
 ## License
